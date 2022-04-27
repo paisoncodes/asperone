@@ -117,7 +117,7 @@ USE_I18N = True
 USE_TZ = True
 
 PAYMENT_NOTIFICATION_URL = "https://dev.workaport.com/api/method/paymentnotification"
-GET_INFORMATION_URL = ""
+GET_INFORMATION_URL = "https://dev.workaport.com/api/method/getinformation"
 PAYMENT_REVERSAL_URL = ""
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
