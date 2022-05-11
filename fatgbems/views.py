@@ -17,9 +17,7 @@ headers = {
 
 class PaymentNotification(APIView):
     def post(self, request):
-        data = {
-            "data": request.data
-        }
+        new_data = request.data
         try:
             headers["Authorization"] = request.headers["Authorization"]
         except Exception:
@@ -29,11 +27,25 @@ class PaymentNotification(APIView):
                 },
                 status=status.HTTP_401_UNAUTHORIZED
             )
+        
+        try:
+            new_data["TerminalID"] = request.headers["TerminalID"]
+        except Exception:
+            return Response(
+                {
+                    "message": "TerminalID should not be empty"
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        data = {
+            "data": new_data
+        }
 
         response = requests.post(PAYMENT_NOTIFICATION_URL, data=json.dumps(data), headers=headers)
         new_response = response.json()
         if response.status_code == 401:
-            return Response(new_response, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(new_response["message"], status=status.HTTP_401_UNAUTHORIZED)
         elif response.status_code == 400:
             return Response(new_response, status=status.HTTP_400_BAD_REQUEST)
         elif response.status_code == 404:
@@ -78,27 +90,25 @@ class GetInformation(APIView):
                 },
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        if "TerminalID" not in request.headers.keys():
+
+        try:
+            data["terminal_id"] = request.headers["TerminalID"]
+        except Exception:
             return Response(
                 {
                     "message": "TerminalID is empty"
                 },
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        if "SerialNumber" not in request.headers.keys():
+
+        try:
+            data["serial_number"] = request.headers["SerialNumber"]
+        except Exception:
             return Response(
                 {
-                    "message": "SerialNumber is empty"
+                    "message": "SerialNumber empty"
                 },
                 status=status.HTTP_401_UNAUTHORIZED
-            )
-        
-        if (data["TerminalID"] != request.headers["TerminalID"]) or (data["SerialNumber"] != request.headers["SerialNumber"]):
-            return Response(
-                {
-                    "message": "Terminal not found"
-                },
-                status=status.HTTP_400_BAD_REQUEST
             )
 
         response = requests.post(GET_INFORMATION_URL, data=json.dumps(data), headers=headers)
