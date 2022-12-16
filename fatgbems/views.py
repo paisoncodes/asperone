@@ -101,16 +101,6 @@ class GetInformation(APIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
-        try:
-            data["serial_number"] = request.headers["SerialNumber"]
-        except Exception:
-            return Response(
-                {
-                    "message": "SerialNumber empty"
-                },
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-
         response = requests.post(GET_INFORMATION_URL, data=json.dumps(data), headers=headers)
         new_response = response.json()
         if response.status_code == 401:
