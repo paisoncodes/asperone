@@ -118,7 +118,7 @@ USE_TZ = True
 
 PAYMENT_NOTIFICATION_URL = "https://asperone.net/api/method/paymentnotification"
 GET_INFORMATION_URL = "https://asperone.net/api/method/getinformation"
-PAYMENT_REVERSAL_URL = ""
+PAYMENT_REVERSAL_URL = "https://asperone.net/api/method/paymentreversal"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
